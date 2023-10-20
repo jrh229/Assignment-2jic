@@ -6,7 +6,7 @@
  */
 
 public class AutoComplete implements AutoCompleteInterface {
-
+private DLBNode advancenextnode;
   private DLBNode root;
   private StringBuilder currentPrefix;
   private DLBNode currentNode;
