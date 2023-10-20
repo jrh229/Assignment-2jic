@@ -222,87 +222,46 @@ public class AutoComplete implements AutoCompleteInterface {
    * in the dictionary and false otherwise
    */
     public boolean advance(char c){
-     
-      boolean foundit = false;
-      if(currentPrefix.length()==0){                                            //If we are starting from root
-        currentNode = root;
-        if(currentNode.data==c){
-            currentPrefix.append(c);
-            foundit = true;
-            cNodelength++;
-            
-        }
-      else{
-          DLBNode Stott = currentNode.nextSibling;                              //Next Sibling
-          boolean RIDERIDERSOFTHEODEN = false;
-          if(Stott!=null){
-            RIDERIDERSOFTHEODEN = true;
-          }
-              while(RIDERIDERSOFTHEODEN){                                   //We check the siblings till we reach either the correct one, or a null in which we make a new one
-                if(Stott.data==c){                                              //If Praise be to God we find the right sibling
-                  foundit = true;
-                  currentNode = Stott;                                          //Curr node is now this sibling
-                  currentPrefix.append(c);
-                  cNodelength++;
-                  
-                  RIDERIDERSOFTHEODEN = false;
-                  
-                }
-                else if(Stott.nextSibling==null){
-                  RIDERIDERSOFTHEODEN = false;
-                }
-                else{                                                           //KEEP GOING
-                  Stott = Stott.nextSibling;
-                }
-              }
-          }
-      }
-
-      else{
-        if(currentNode.child!=null){
-          if(currentNode.child.data==c){
-            foundit = true;
-            currentNode=currentNode.child;
-            currentPrefix.append(c);
-            cNodelength++;
-            
-          }
-          else{
-            DLBNode Stott = currentNode.nextSibling;                              //Next Sibling
-            boolean RIDERIDERSOFTHEODEN = false;
-            if(Stott!=null){
-              RIDERIDERSOFTHEODEN = true;
-            }
-              while(RIDERIDERSOFTHEODEN){                                               //We check the siblings till we reach either the correct one, or a null in which we make a new one
-                if(Stott.data==c){                                              //If Praise be to God we find the right sibling
-                  foundit = true;
-                  currentNode = Stott;                                          //Curr node is now this sibling
-                  currentPrefix.append(c);
-                  cNodelength++;
-                  RIDERIDERSOFTHEODEN = false;
-
-                }
-                else if(Stott.nextSibling==null){
-                  RIDERIDERSOFTHEODEN = false;
-                }
-                else{                                                           //KEEP GOING
-                  Stott = Stott.nextSibling;
-                }
-              }
-          }
-        }
-      }
-       prefixlength++;
-      //printTrie(root, maxdepth);
-      if(foundit != true){
+        printTrie(root, maxdepth);
+        boolean ispre = false;
         currentPrefix.append(c);
-      }
-      if(prefixlength==cNodelength){
-        return true;
-      }
-      else{
-        return false;
-      }
+        if(prefixlength==0){            //We are at root
+          currentNode = root;
+          
+        }
+        else{
+          currentNode =advancenextnode;
+        }
+        //System.out.println("Current Node:" + currentNode.data);
+        if(currentNode.data==c){
+          cNodelength++;
+          ispre = true;
+          if(currentNode.child!=null){
+            advancenextnode=currentNode.child;
+          }
+        }
+        else if(currentNode.nextSibling!=null){
+          DLBNode Stott = currentNode.nextSibling;      //New Potential Sibling
+                  boolean VORWARTS = true;
+                  while(VORWARTS){                                    //We check the siblings till we reach either the correct one, or a null in which we make a new one
+                  
+                  if(Stott.nextSibling==null){                      //If we find the edge, which means we gotta make a new Sibling
+                    ispre = false;                             //Cur node = new DLB
+                    VORWARTS = false;                               //STOP LOOPING
+                    }
+                  else if(Stott.data==c){                         //If Praise be to God we find the right sibling
+                    advancenextnode = Stott;                            //Curr node is now this sibling
+                    VORWARTS = false;                               //KILL THE LOOPING
+                    cNodelength++;
+                    ispre = true;
+                  }
+                  else{                                             //KEEP GOING
+                    Stott = Stott.nextSibling;
+                  }
+                }
+        }
+        prefixlength++;
+        return ispre;
       
     }
 
